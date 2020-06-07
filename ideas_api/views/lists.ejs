@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- title -->
+    <title>Ideas.API</title>
+    <!-- fontawesome -->
+    <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <!-- css -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" />
+    <!-- script -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- Nav  -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <!-- navbar-brand -->
+            <a href="/" class="navbar-brand">Ideas.API</a>
+            <a href="/" class="nav-link btn btn-outline-secondary text-light ml-3">アイディアを新規登録する</a>
+    </nav>
+
+    <!-- flash -->
+    <div class="container mt-1">
+        <% if(flashMsg.success){ %>
+        <div class="alert alert-success" role="alert">
+            <%= flashMsg.success %>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="alert" aria-label="閉じる">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <% }else if(flashMsg.error){ %>
+        <div class="alert alert-success" role="alert">
+            <%= flashMsg.error %>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="alert" aria-label="閉じる">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <% } %>
+    </div>
+
+
+    <!-- titile -->
+    <div class="container">
+        <h2 class="py-4">アイディア情報一覧</h2>
+    </div>
+
+    <section id="Dashboard-wrap" class="mb-5">
+        <div class="container">
+            <div class="row">
+                <!-- **** #Dashboard-list ****  -->
+                <div class="col" id="Dashboard-list">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <button class="input-group-text" onclick="copyToClipboard()">apiURL</button>
+                                </div>
+                                <input id="copyTarget" class="form-control" type="text" value="" readonly>
+                            </div>
+                            <h6> カテゴリを選択してください</h6>
+                            <hr>
+                            <!-- category -->
+                            <div style="font-size: 0.8rem;">
+                                <button class="categoryBtn my-1 mr-2 active" value="全件">全件</button>
+                                <% categories.forEach( category =>{ %>
+                                <button class="categoryBtn my-1"
+                                    value="<%= category.category_name %>"><%= category.category_name %><a href=""
+                                        class="categoryDeleteBtn ml-3" data-value="<%= category._id %>"><i
+                                            class="fas fa-times"></i></a></button>
+
+                                <% }); %>
+                            </div>
+                        </div>
+
+                        <!-- body -->
+                        <div class="card-body py-1">
+                            <div id="ideaContent">
+
+                            </div>
+
+                        </div>
+                        <div class="card-footer">
+                        </div>
+                    </div>
+                </div><!-- /.col #Dashboard-list -->
+
+            </div><!-- /.row -->
+        </div><!-- /.container -->
+    </section><!-- /#Dashboard-wrap (#Dashboard-list / #Sidenav-btn)  -->
+
+    <style>
+        .active {
+            color: #fff;
+            background-color: blue;
+        }
+    </style>
+
+    <script>
+
+        //copyTarget
+        function copyToClipboard()
+        {
+            var copyTarget = document.getElementById("copyTarget");
+            copyTarget.select();
+            document.execCommand("Copy");
+            alert("コピー完了 : " + copyTarget.value);
+        }
+
+        //category
+        $(".categoryBtn").click(function ()
+        {
+            let categoryName = $(this).val();
+            let categoryText = $(this).text();
+            //copyUrl
+            $("#copyTarget").val(`http://localhost:3000/lists/json/${categoryText}`);
+            //btn
+            $(".categoryBtn").removeClass("active");
+            $(this).addClass("active");
+            //ajax
+            $("#ideaContent").html("");
+            $.get(`/lists/${categoryName}`, ideas =>
+            {
+                ideas.forEach(idea =>
+                {
+                    $("#ideaContent").append(
+                        `<div class="idea-body" style="font-size: 0.8rem; padding:0 2rem">
+                        <p class="text-dark">
+                            <span style="padding:2px; color:#fff; background-color:blue;">${idea.category_name}</span> 
+                        <p>${idea.body}</p>
+                        <a href="/lists/idea/${idea._id}/delete?_method=DELETE" style="color: brown;">削除</a>  (idea ID : ${idea._id})
+                        <hr>
+                        </div>`
+                    );
+                });
+            });
+        });
+
+        //categoryDelete
+        $(".categoryDeleteBtn").click(function ()
+        {
+            let categoryId = $(this).attr("data-value");
+            let result = confirm("カテゴリを削除しますか？");
+            if (result)
+            {
+                //ajax
+                $.get(`/lists/category/${categoryId}/delete?_method=DELETE`);
+            } else
+            {
+                console.log("キャンセルされました。");
+            }
+
+        });
+
+
+    </script>
+</body>
+
+</html>

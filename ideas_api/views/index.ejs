@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- title -->
+    <title>Ideas.API</title>
+    <!-- fontawesome -->
+    <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <!-- css -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" />
+    <!-- script -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- Nav  -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <!-- navbar-brand -->
+            <a href="/" class="navbar-brand">Ideas.API</a>
+            <a href="/lists" class="nav-link btn btn-outline-secondary text-light ml-3">登録アイディア一覧</a>
+    </nav>
+
+    <!-- flash -->
+    <div class="container mt-1">
+        <% if(flashMsg.success){ %>
+        <div class="alert alert-success" role="alert">
+            <%= flashMsg.success %>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="alert" aria-label="閉じる">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <% }else if(flashMsg.error){ %>
+        <div class="alert alert-danger" role="alert">
+            <%= flashMsg.error %>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="alert" aria-label="閉じる">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <% } %>
+    </div>
+
+
+    <!-- titile -->
+    <div class="container">
+        <h2 class="py-4">アイディア登録</h2>
+    </div>
+    <!-- Form  -->
+    <section id="form" class="container py-4 mt-4">
+
+        <p>
+            以下入力してアイディアを登録してください。登録内容とAPI取得用URL情報は<a href="/lists">こちら</a>で確認できます。
+        </p>
+
+        <form action="/create" method="POST">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fab fa-adversal"></i></div>
+                </div>
+                <input type="text" name="category_name" class="form-control" placeholder="カテゴリ(会議について)" required>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fas fa-pencil-alt"></i></div>
+                </div>
+                <textarea class="form-control" name="body" cols="60" rows="3" maxlength="300"
+                    placeholder="300文字以内でご入力ください（月曜日の定期MTGをオンラインで行い業務効率化を図りたいです）" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg btn-block mt-4">登録</button>
+        </form>
+        <hr>
+        <p class="mt-4">【仕様について】</p>
+        <ul class="bg-light py-2">
+            <li>言語：Node.js(express) , DB：MongoDB (DB名 ideas_db)</li>
+            <li>/listsページでapiURLの取得、カテゴリとアイディアの閲覧削除ができます</li>
+            <li>テスト：申し訳ございません。RSpec未実装です（現段階でRuby on Railが記述できないため）</li>
+        </ul>
+
+    </section>
+
+
+
+</body>
+
+</html>
