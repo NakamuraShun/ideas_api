@@ -1,16 +1,18 @@
 const
-    port = 3000,
-    express = require("express"),
-    app = express(),
-    router = express.Router(),
-    methodOverride = require("method-override"),
-    connectFlash = require('connect-flash'),
-    cookieParser = require('cookie-parser'),
-    expressSession = require('express-session'),
-    ideasController = require("./controllers/ideasController"),
-    categoriesController = require("./controllers/categoriesController"),
-    errorController = require("./controllers/errorController")
-    ;
+port = 3000,
+express = require("express"),
+app = express(),
+router = express.Router(),
+methodOverride = require("method-override"),
+connectFlash = require('connect-flash'),
+cookieParser = require('cookie-parser'),
+expressSession = require('express-session'),
+ideasController = require("./controllers/ideasController"),
+categoriesController = require("./controllers/categoriesController"),
+errorController = require("./controllers/errorController")
+;
+
+
 
 
 //db
