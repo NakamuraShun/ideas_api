@@ -65,4 +65,4 @@ router.use(errorController.respond500);
 
 
 //server
-app.listen(port, () => { console.log(`${port}で接続中…`); });
+app.listen(port, () => { console.log(`${port}で接続中`); });
